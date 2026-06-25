@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CleanSpin | Profit Tracker & KPI Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-chart-line"></i> Clean<span>Spin</span>
+        </div>
+        <nav>
+            <a href="#dashboard" class="active"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a href="#calculator"><i class="fas fa-calculator"></i> Profit Calculator</a>
+            <a href="#checklist"><i class="fas fa-tasks"></i> Weekly Checklist</a>
+        </nav>
+    </div>
+
+    <main class="content">
+        <header>
+            <h1>Profit Tracking & KPI Dashboard</h1>
+            <div class="date-range">
+                <span>Last 30 Days</span>
+                <i class="fas fa-calendar-alt"></i>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="page">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon revenue"><i class="fas fa-dollar-sign"></i></div>
+                    <div class="stat-info">
+                        <h3>Total Revenue</h3>
+                        <p id="dash-revenue">$15,420.00</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon cogs"><i class="fas fa-box"></i></div>
+                    <div class="stat-info">
+                        <h3>Total COGS</h3>
+                        <p id="dash-cogs">$4,800.00</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon spend"><i class="fas fa-ad"></i></div>
+                    <div class="stat-info">
+                        <h3>Ad Spend</h3>
+                        <p id="dash-spend">$5,120.00</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon profit"><i class="fas fa-hand-holding-usd"></i></div>
+                    <div class="stat-info">
+                        <h3>Net Profit</h3>
+                        <p id="dash-profit">$5,500.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3>Revenue vs Profit (Weekly)</h3>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>KPI Performance vs Targets</h3>
+                    <table class="kpi-table">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Current</th>
+                                <th>Target</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kpi-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculator Section -->
+        <section id="calculator" class="page" style="display: none;">
+            <div class="calculator-container">
+                <div class="calc-form">
+                    <h2>Profit Calculator</h2>
+                    <div class="input-group">
+                        <label for="calc-rev">Total Revenue ($)</label>
+                        <input type="number" id="calc-rev" value="1000" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="calc-units">Units Sold</label>
+                        <input type="number" id="calc-units" value="22" step="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="calc-unit-cost">Unit Cost (COGS) ($)</label>
+                        <input type="number" id="calc-unit-cost" value="14" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="calc-ad-spend">Ad Spend ($)</label>
+                        <input type="number" id="calc-ad-spend" value="300" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="calc-shipping">Shipping per Unit ($)</label>
+                        <input type="number" id="calc-shipping" value="5" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <label for="calc-misc">Misc Fees (%)</label>
+                        <input type="number" id="calc-misc" value="3" step="0.1">
+                    </div>
+                    <button id="calculate-btn" class="btn">Calculate Results</button>
+                </div>
+
+                <div class="calc-results">
+                    <h2>Calculated Metrics</h2>
+                    <div class="results-grid">
+                        <div class="res-item">
+                            <span>Gross Profit:</span>
+                            <strong id="res-gross">$0.00</strong>
+                        </div>
+                        <div class="res-item">
+                            <span>Net Profit:</span>
+                            <strong id="res-net">$0.00</strong>
+                        </div>
+                        <div class="res-item">
+                            <span>Profit Margin:</span>
+                            <strong id="res-margin">0%</strong>
+                        </div>
+                        <div class="res-item">
+                            <span>ROAS:</span>
+                            <strong id="res-roas">0x</strong>
+                        </div>
+                        <div class="res-item">
+                            <span>Break-even Units:</span>
+                            <strong id="res-break-even">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Checklist Section -->
+        <section id="checklist" class="page" style="display: none;">
+            <div class="checklist-container">
+                <h2>Weekly Review Checklist (Monday Morning)</h2>
+                <ul class="checklist">
+                    <li>
+                        <input type="checkbox" id="check1">
+                        <label for="check1"><strong>Review Ad Performance:</strong> Check ROAS, CTR, and CPC for each active campaign. Kill underperformers.</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="check2">
+                        <label for="check2"><strong>Check Profit Margins:</strong> Ensure net margins are above 35% target. Adjust pricing if necessary.</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="check3">
+                        <label for="check3"><strong>Inventory Status:</strong> Verify stock levels with supplier. Plan next reorder if stock is under 14 days supply.</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="check4">
+                        <label for="check4"><strong>Fulfillment Review:</strong> Ensure all orders from previous week are shipped. Check for tracking errors.</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="check5">
+                        <label for="check5"><strong>Analyze Feedback:</strong> Read new reviews and customer emails. Identify recurring product or shipping issues.</label>
+                    </li>
+                    <li>
+                        <input type="checkbox" id="check6">
+                        <label for="check6"><strong>Content Planning:</strong> Plan TikTok/Instagram content schedule for the week. Brief Automation Specialist on any new sequences.</label>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
