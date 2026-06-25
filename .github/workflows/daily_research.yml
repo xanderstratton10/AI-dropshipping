@@ -1,0 +1,36 @@
+name: Daily Product Research
+
+on:
+  schedule:
+    # Run daily at 06:00 UTC
+    - cron: "0 6 * * *"
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run product research
+        run: python scripts/product_research.py
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          RAPIDAPI_HOST: ${{ secrets.RAPIDAPI_HOST }}
+
+      - name: Upload research results as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-results
+          path: research_results.json
+          retention-days: 14
